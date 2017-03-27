@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/CloudyKit/jet"
 	"github.com/devfeel/dotweb"
 	"github.com/devfeel/dotweb/framework/file"
+	"io"
 	"strconv"
 )
 
@@ -22,6 +24,9 @@ func main() {
 
 	//设置路由
 	InitRoute(app.HttpServer)
+
+	//use Jet template
+	app.HttpServer.SetRenderer(NewJetRenderer().Reload(true))
 
 	//启动 监控服务
 	//pprofport := 8081
@@ -55,9 +60,54 @@ func TestView(ctx *dotweb.HttpContext) {
 	m[4] = &BookInfo{Name: "book4", Size: 10000}
 	ctx.ViewData().Set("Books", m)
 
-	ctx.View("d:/gotmp/testview.html")
+	//if use jet template, file name is testview_jet.html
+	//if use go template, file name is testview.html
+	ctx.View("testview.html")
+
 }
 
 func InitRoute(server *dotweb.HttpServer) {
 	server.Router().GET("/", TestView)
+}
+
+var views = jet.NewHTMLSet("d:/gotmp/templates")
+
+type jetRenderer struct {
+}
+
+func (r *jetRenderer) Render(w io.Writer, tpl string, data interface{}, ctx *dotweb.HttpContext) error {
+	view, err := views.GetTemplate(tpl)
+	fmt.Println(view, err)
+	if err != nil {
+		fmt.Println("Unexpected template err:", err.Error())
+	}
+	//if use vars mode, template not use "."
+	vars := convertMapToVar(data)
+	return view.Execute(w, vars, nil)
+
+	//if use data mode, template use "."
+	//return view.Execute(w, nil, data)
+}
+
+func NewJetRenderer() *jetRenderer {
+	r := new(jetRenderer)
+
+	return r
+}
+func (jet *jetRenderer) Reload(b bool) *jetRenderer {
+	views.SetDevelopmentMode(b)
+	return jet
+}
+
+func convertMapToVar(data interface{}) jet.VarMap {
+	vars := make(jet.VarMap, 0)
+	if mapData, isMap := data.(map[string]interface{}); isMap {
+		for k, v := range mapData {
+			vars.Set(k, v)
+		}
+	} else {
+		//TODO:log the error request
+	}
+
+	return vars
 }
