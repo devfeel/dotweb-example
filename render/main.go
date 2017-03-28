@@ -26,7 +26,7 @@ func main() {
 	InitRoute(app.HttpServer)
 
 	//use Jet template
-	app.HttpServer.SetRenderer(NewJetRenderer().Reload(true))
+	//app.HttpServer.SetRenderer(NewJetRenderer().Reload(true))
 
 	//启动 监控服务
 	//pprofport := 8081
@@ -42,6 +42,7 @@ func main() {
 type UserInfo struct {
 	UserName string
 	Sex      bool
+	Url      string
 }
 
 type BookInfo struct {
@@ -51,7 +52,7 @@ type BookInfo struct {
 
 func TestView(ctx *dotweb.HttpContext) {
 	ctx.ViewData().Set("data", "图书信息")
-	ctx.ViewData().Set("user", &UserInfo{UserName: "user1", Sex: true})
+	ctx.ViewData().Set("user", &UserInfo{UserName: "user1", Sex: true, Url: "http://www.baidu.com/i=1&x=2&c=3"})
 	m := make([]*BookInfo, 5)
 	m[0] = &BookInfo{Name: "book0", Size: 1}
 	m[1] = &BookInfo{Name: "book1", Size: 10}
@@ -62,7 +63,7 @@ func TestView(ctx *dotweb.HttpContext) {
 
 	//if use jet template, file name is testview_jet.html
 	//if use go template, file name is testview.html
-	ctx.View("testview.html")
+	ctx.View("d:/gotmp/templates/testview.html")
 
 }
 
