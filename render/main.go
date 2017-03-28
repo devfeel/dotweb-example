@@ -52,7 +52,7 @@ type BookInfo struct {
 
 func TestView(ctx *dotweb.HttpContext) {
 	ctx.ViewData().Set("data", "图书信息")
-	ctx.ViewData().Set("user", &UserInfo{UserName: "user1", Sex: true, Url: "http://www.baidu.com/i=1&x=2&c=3"})
+	ctx.ViewData().Set("user", &UserInfo{UserName: "user1", Sex: true, Url: "client_id=dsfadafsdsfads1213fdsafdasfa&redirect_uri=http%3A%2F%2F192.168.1.100%3A9094%2Foauth2&response_type=code&scope=all&state=xyz"})
 	m := make([]*BookInfo, 5)
 	m[0] = &BookInfo{Name: "book0", Size: 1}
 	m[1] = &BookInfo{Name: "book1", Size: 10}
@@ -60,7 +60,8 @@ func TestView(ctx *dotweb.HttpContext) {
 	m[3] = &BookInfo{Name: "book3", Size: 1000}
 	m[4] = &BookInfo{Name: "book4", Size: 10000}
 	ctx.ViewData().Set("Books", m)
-
+	//ctx.ViewData().Set("urlPrams", "client_id=dsfadafsdsfads1213fdsafdasfa&redirect_uri=http%3A%2F%2F192.168.1.100%3A9094%2Foauth2&response_type=code&scope=all&state=xyz")
+	//ctx.ViewData().Set("urlPrams", "i=1&x=2&c=3")
 	//if use jet template, file name is testview_jet.html
 	//if use go template, file name is testview.html
 	ctx.View("d:/gotmp/templates/testview.html")
