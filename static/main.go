@@ -10,16 +10,7 @@ import (
 func main() {
 	//初始化DotServer
 	app := dotweb.New()
-
-	//设置dotserver日志目录
-	app.SetLogPath(file.GetCurrentDirectory())
-
-	//设置Debug开关
-	app.SetEnabledDebug(true)
-
-	//app.HttpServer.
-
-	app.SetEnabledListDir(false)
+	app.HttpServer.SetEnabledListDir(false)
 
 	//设置路由
 	InitRoute(app.HttpServer)

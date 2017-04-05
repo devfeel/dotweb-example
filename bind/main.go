@@ -11,12 +11,6 @@ func main() {
 	//初始化DotServer
 	app := dotweb.New()
 
-	//设置dotserver日志目录
-	app.SetLogPath(file.GetCurrentDirectory())
-
-	//设置Debug开关
-	app.SetEnabledDebug(true)
-
 	//设置gzip开关
 	//app.SetEnabledGzip(true)
 

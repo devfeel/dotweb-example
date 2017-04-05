@@ -5,24 +5,18 @@ import (
 	"github.com/devfeel/dotweb"
 	"github.com/devfeel/dotweb/framework/file"
 	"github.com/devfeel/dotweb/session"
+	"net/http"
 	"strconv"
 )
 
 func main() {
 	//初始化DotServer
 	app := dotweb.New()
-
-	//设置dotserver日志目录
-	app.SetLogPath(file.GetCurrentDirectory())
-
-	//设置Debug开关
-	app.SetEnabledDebug(true)
-
 	//设置gzip开关
-	//app.SetEnabledGzip(true)
+	//app.HttpServer.SetEnabledGzip(true)
 
 	//设置Session开关
-	app.SetEnabledSession(true)
+	app.HttpServer.SetEnabledSession(true)
 
 	//设置Session配置
 	//runtime mode
@@ -51,20 +45,41 @@ func main() {
 	fmt.Println("dotweb.StartServer error => ", err)
 }
 
-func TestSession(ctx *dotweb.HttpContext) {
-	type UserInfo struct {
-		UserName string
-		NickName string
-	}
+type UserInfo struct {
+	UserName string
+	NickName string
+}
+
+func One(ctx *dotweb.HttpContext) {
+
 	user := UserInfo{UserName: "test", NickName: "testName"}
 	ctx.Session().Set("username", user)
 	userRead := ctx.Session().Get("username").(UserInfo)
 
-	ctx.WriteString("welcome to dotweb - sessionid=> " + ctx.SessionID +
+	ctx.WriteString("One - sessionid=> " + ctx.SessionID +
 		", session-len=>" + strconv.Itoa(ctx.Session().Count()) +
 		",username=>" + fmt.Sprintln(userRead))
 }
 
+func Two(ctx *dotweb.HttpContext) {
+	userRead := ctx.Session().Get("username")
+
+	ctx.WriteString("Two - sessionid=> " + ctx.SessionID +
+		", session-len=>" + strconv.Itoa(ctx.Session().Count()) +
+		",username=>" + fmt.Sprintln(userRead))
+}
+
+func Logout(ctx *dotweb.HttpContext) {
+	fmt.Println("Logout")
+	ctx.Session().Remove("username")
+	fmt.Println("Logout2")
+	//ctx.WriteString("Two - sessionid=> " + ctx.SessionID +
+	//	", session-len=>" + strconv.Itoa(ctx.Session().Count()))
+	ctx.Redirect(http.StatusFound, "/2")
+}
+
 func InitRoute(server *dotweb.HttpServer) {
-	server.Router().GET("/", TestSession)
+	server.Router().GET("/", One)
+	server.Router().GET("/2", Two)
+	server.Router().GET("/logout", Logout)
 }
