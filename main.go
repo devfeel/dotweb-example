@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/devfeel/dotweb"
-	"github.com/devfeel/dotweb/framework/file"
 	"github.com/devfeel/dotweb/session"
+	"net/http"
 	"strconv"
 )
 
@@ -20,7 +20,7 @@ func main() {
 
 	//设置Session配置
 	//runtime mode
-	app.SetSessionConfig(session.NewDefaultRuntimeConfig())
+	app.HttpServer.SetSessionConfig(session.NewDefaultRuntimeConfig())
 	//redis mode
 	//app.SetSessionConfig(session.NewDefaultRedisConfig("192.168.8.175:6379", ""))
 
@@ -71,7 +71,7 @@ func DefaultError(ctx *dotweb.HttpContext) {
 }
 
 func Redirect(ctx *dotweb.HttpContext) {
-	ctx.Redirect("http://www.baidu.com")
+	ctx.Redirect(http.StatusOK, "http://www.baidu.com")
 }
 
 func InitRoute(server *dotweb.HttpServer) {

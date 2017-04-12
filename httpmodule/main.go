@@ -23,7 +23,7 @@ func main() {
 
 	//设置Session配置
 	//runtime mode
-	app.SetSessionConfig(session.NewDefaultRuntimeConfig())
+	app.HttpServer.SetSessionConfig(session.NewDefaultRuntimeConfig())
 	//redis mode
 	//app.SetSessionConfig(session.NewDefaultRedisConfig("192.168.8.175:6379", ""))
 

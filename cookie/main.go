@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/devfeel/dotweb"
-	"github.com/devfeel/dotweb/framework/file"
 	"strconv"
 )
 

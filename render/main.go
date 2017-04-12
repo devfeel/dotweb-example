@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/CloudyKit/jet"
 	"github.com/devfeel/dotweb"
-	"github.com/devfeel/dotweb/framework/file"
 	"io"
 	"strconv"
 )
