@@ -3,17 +3,17 @@ package main
 import (
 	"fmt"
 	"github.com/devfeel/dotweb"
-
-	"github.com/devfeel/dotweb/logger"
+	"github.com/devfeel/dotweb/framework/file"
 	"github.com/devfeel/dotweb/session"
-	"net/http"
 	"strconv"
-	"strings"
 )
 
 func main() {
 	//初始化DotServer
 	app := dotweb.New()
+
+	//设置dotserver日志目录
+	app.SetLogPath(file.GetCurrentDirectory())
 
 	//设置gzip开关
 	//app.HttpServer.SetEnabledGzip(true)
@@ -34,12 +34,11 @@ func main() {
 	InitModule(app)
 
 	//启动 监控服务
-	//pprofport := 8081
-	//go app.StartPProfServer(pprofport)
+	//app.SetPProfConfig(true, 8081)
 
 	//全局容器
-	//app.AppContext.Set("gstring", "gvalue")
-	//app.AppContext.Set("gint", 1)
+	app.AppContext.Set("gstring", "gvalue")
+	app.AppContext.Set("gint", 1)
 
 	// 开始服务
 	port := 8080
@@ -48,34 +47,38 @@ func main() {
 	fmt.Println("dotweb.StartServer error => ", err)
 }
 
+func Index(ctx dotweb.Context) error {
+	ctx.Items().Set("count", 2)
+	ctx.WriteString("index => " + ctx.Items().GetString("count"))
+	_, err := ctx.WriteString("\r\n")
+	return err
+}
+
 func InitRoute(server *dotweb.HttpServer) {
-	server.Router().GET("/index", Index)
-	server.Router().GET("/test", Test)
-}
-
-func Index(ctx *dotweb.HttpContext) {
-	logger.Logger().Debug(ctx.Url()+" => "+ctx.Items().GetString("count"), "moduletest")
-}
-
-func Test(ctx *dotweb.HttpContext) {
-	r, err := http.Get("http://192.168.8.178:8080/index?count=" + strconv.Itoa(int(dotweb.GlobalState.TotalRequestCount)))
-	if err != nil {
-		ctx.WriteString(err)
-	} else {
-		ctx.WriteString(r.Status)
-	}
+	server.Router().GET("/", Index)
+	server.Router().GET("/user", Index) //need login
+	server.Router().GET("/login", Index)
+	server.Router().GET("/reg", Index)
 }
 
 func InitModule(dotserver *dotweb.DotWeb) {
 	dotserver.RegisterModule(&dotweb.HttpModule{
-		OnBeginRequest: func(ctx *dotweb.HttpContext) {
-			if strings.Index(ctx.Url(), "/index?") >= 0 {
-				ctx.Items().Set("count", ctx.QueryString("count"))
+		OnBeginRequest: func(ctx dotweb.Context) {
+			if ctx.HttpServer().Router().MatchPath(ctx, "/user") {
+				//TODO:need login
+			}
+			ctx.Items().Set("count", 1)
+			ctx.WriteString("OnBeginRequest => ", ctx.Items().GetString("count"))
+			ctx.WriteString("\r\n")
+			if ctx.QueryString("skip") == "1" {
+				ctx.End()
 			}
 		},
-		OnEndRequest: func(ctx *dotweb.HttpContext) {
-			if strings.Index(ctx.Url(), "/index?") >= 0 {
-				ctx.Items().Remove("count")
+		OnEndRequest: func(ctx dotweb.Context) {
+			if ctx.Items().Exists("count") {
+				ctx.WriteString("OnEndRequest => ", ctx.Items().GetString("count"))
+			} else {
+				ctx.WriteString("OnEndRequest => ", ctx.Items().Len())
 			}
 		},
 	})

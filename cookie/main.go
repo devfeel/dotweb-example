@@ -39,16 +39,18 @@ type UserInfo struct {
 	NickName string
 }
 
-func One(ctx *dotweb.HttpContext) {
+func One(ctx dotweb.Context) error {
 	ctx.SetCookieValue("dotweb-test", "dotweb", 0)
 	fmt.Println("One ", "dotweb")
-	ctx.WriteString("One - set cookie")
+	_, err := ctx.WriteString("One - set cookie")
+	return err
 }
 
-func Two(ctx *dotweb.HttpContext) {
+func Two(ctx dotweb.Context) error {
 	val, err := ctx.ReadCookie("dotweb-test")
 	fmt.Println("begin remove ", val, err)
-	ctx.WriteString("Two - cookie =>", val, err)
+	_, err = ctx.WriteString("Two - cookie =>", val, err)
+	return err
 }
 
 func InitRoute(server *dotweb.HttpServer) {

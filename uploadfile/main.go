@@ -11,6 +11,9 @@ func main() {
 	//初始化DotServer
 	app := dotweb.New()
 
+	//设置dotserver日志目录
+	app.SetLogPath(file.GetCurrentDirectory())
+
 	//设置路由
 	InitRoute(app.HttpServer)
 
@@ -18,8 +21,7 @@ func main() {
 	//InitModule(app)
 
 	//启动 监控服务
-	//pprofport := 8081
-	//go app.StartPProfServer(pprofport)
+	//app.SetPProfConfig(true, 8081)
 
 	// 开始服务
 	port := 8080
@@ -32,20 +34,20 @@ func InitRoute(server *dotweb.HttpServer) {
 	server.Router().POST("/file", FileUpload)
 }
 
-func FileUpload(ctx *dotweb.HttpContext) {
-	upload, err := ctx.FormFile("file")
+func FileUpload(ctx dotweb.Context) error {
+	upload, err := ctx.Request().FormFile("file")
 	if err != nil {
-		ctx.WriteString("FormFile error " + err.Error())
-		return
+		_, err := ctx.WriteString("FormFile error " + err.Error())
+		return err
 	} else {
 		_, err = upload.SaveFile("d:\\" + upload.FileName())
 		if err != nil {
-			ctx.WriteString("SaveFile error => " + err.Error())
-			return
+			_, err := ctx.WriteString("SaveFile error => " + err.Error())
+			return err
 		} else {
-			ctx.WriteString("SaveFile success || " + upload.FileName() + " || " + upload.GetFileExt() + " || " + fmt.Sprint(upload.Size()))
+			_, err := ctx.WriteString("SaveFile success || " + upload.FileName() + " || " + upload.GetFileExt() + " || " + fmt.Sprint(upload.Size()))
 
-			return
+			return err
 		}
 	}
 
