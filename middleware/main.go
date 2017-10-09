@@ -25,8 +25,6 @@ func main() {
 	//设置路由
 	InitRoute(app.HttpServer)
 
-	//InitModule(app)
-
 	app.UseRequestLog()
 	app.Use(
 		NewAccessFmtLog("app"),
@@ -61,28 +59,6 @@ func InitRoute(server *dotweb.HttpServer) {
 	g := server.Group("/group").Use(NewAccessFmtLog("group")).Use(NewSimpleAuth("admin"))
 	g.GET("/", Index)
 	g.GET("/use", Index).Use(NewAccessFmtLog("group-use"))
-}
-
-func InitModule(dotserver *dotweb.DotWeb) {
-	dotserver.RegisterModule(&dotweb.HttpModule{
-		OnBeginRequest: func(ctx dotweb.Context) {
-			fmt.Println(time.Now(), "HttpModule BeginRequest1:", ctx.Request().RequestURI)
-		},
-		OnEndRequest: func(ctx dotweb.Context) {
-			fmt.Println(time.Now(), "HttpModule EndRequest1:", ctx.Request().RequestURI)
-		},
-	})
-
-	dotserver.RegisterModule(&dotweb.HttpModule{
-		OnBeginRequest: func(ctx dotweb.Context) {
-			fmt.Println(time.Now(), "HttpModule BeginRequest2:", ctx.Request().RequestURI)
-		},
-	})
-	dotserver.RegisterModule(&dotweb.HttpModule{
-		OnEndRequest: func(ctx dotweb.Context) {
-			fmt.Println(time.Now(), "HttpModule EndRequest3:", ctx.Request().RequestURI)
-		},
-	})
 }
 
 type AccessFmtLog struct {
