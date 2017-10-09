@@ -18,8 +18,12 @@ func main() {
 	//设置gzip开关
 	//app.HttpServer.SetEnabledGzip(true)
 
+	app.SetDevelopmentMode()
+
 	//设置Session开关
 	app.HttpServer.SetEnabledSession(true)
+
+	app.HttpServer.SetEnabledIgnoreFavicon(true)
 
 	//设置Session配置
 	//runtime mode
@@ -31,7 +35,7 @@ func main() {
 	InitRoute(app.HttpServer)
 
 	//设置HttpModule
-	InitModule(app)
+	InitModule(app.HttpServer)
 
 	//启动 监控服务
 	//app.SetPProfConfig(true, 8081)
@@ -49,36 +53,55 @@ func main() {
 
 func Index(ctx dotweb.Context) error {
 	ctx.Items().Set("count", 2)
-	ctx.WriteString("index => " + ctx.Items().GetString("count"))
+	ctx.WriteString(ctx.Request().Path() + ":Items.Count=> " + ctx.Items().GetString("count"))
 	_, err := ctx.WriteString("\r\n")
 	return err
 }
 
-func InitRoute(server *dotweb.HttpServer) {
-	server.Router().GET("/", Index)
-	server.Router().GET("/user", Index) //need login
-	server.Router().GET("/login", Index)
-	server.Router().GET("/reg", Index)
+func WHtml(ctx dotweb.Context) error {
+	ctx.WriteHtml("this is html response!")
+	return nil
 }
 
-func InitModule(dotserver *dotweb.DotWeb) {
+func InitRoute(server *dotweb.HttpServer) {
+	server.GET("/", Index)
+	server.GET("/m", Index)
+	server.GET("/h", WHtml)
+}
+
+func InitModule(dotserver *dotweb.HttpServer) {
 	dotserver.RegisterModule(&dotweb.HttpModule{
+		Name: "test change route",
 		OnBeginRequest: func(ctx dotweb.Context) {
-			if ctx.HttpServer().Router().MatchPath(ctx, "/user") {
-				//TODO:need login
+			if ctx.IsEnd() {
+				return
 			}
-			ctx.Items().Set("count", 1)
-			ctx.WriteString("OnBeginRequest => ", ctx.Items().GetString("count"))
-			ctx.WriteString("\r\n")
+			if ctx.Request().Path() == "/" && ctx.QueryString("change") == "1" {
+				//change route
+				ctx.WriteString("变更访问路由测试")
+				ctx.WriteString("\r\n")
+				ctx.Request().URL.Path = "/m"
+			}
+
+			if ctx.Request().Path() == "/" {
+				ctx.Items().Set("count", 1)
+				ctx.WriteString("OnBeginRequest:Items.Count => ", ctx.Items().GetString("count"))
+				ctx.WriteString("\r\n")
+			}
 			if ctx.QueryString("skip") == "1" {
 				ctx.End()
 			}
 		},
 		OnEndRequest: func(ctx dotweb.Context) {
-			if ctx.Items().Exists("count") {
-				ctx.WriteString("OnEndRequest => ", ctx.Items().GetString("count"))
-			} else {
-				ctx.WriteString("OnEndRequest => ", ctx.Items().Len())
+			if ctx.IsEnd() {
+				return
+			}
+			if ctx.Request().Path() == "/" {
+				if ctx.Items().Exists("count") {
+					ctx.WriteString("OnEndRequest:Items.Count => ", ctx.Items().GetString("count"))
+				} else {
+					ctx.WriteString("OnEndRequest:Items.Len => ", ctx.Items().Len())
+				}
 			}
 		},
 	})
