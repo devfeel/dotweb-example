@@ -90,7 +90,8 @@ func InitRoute(server *dotweb.HttpServer) {
 }
 
 func InitModule(dotserver *dotweb.DotWeb) {
-	dotserver.RegisterModule(&dotweb.HttpModule{
+	dotserver.HttpServer.RegisterModule(&dotweb.HttpModule{
+		Name:"test change route",
 		OnBeginRequest: func(ctx dotweb.Context) {
 			fmt.Println("BeginRequest1:", ctx)
 		},
@@ -99,12 +100,12 @@ func InitModule(dotserver *dotweb.DotWeb) {
 		},
 	})
 
-	dotserver.RegisterModule(&dotweb.HttpModule{
+	dotserver.HttpServer.RegisterModule(&dotweb.HttpModule{
 		OnBeginRequest: func(ctx dotweb.Context) {
 			fmt.Println("BeginRequest2:", ctx)
 		},
 	})
-	dotserver.RegisterModule(&dotweb.HttpModule{
+	dotserver.HttpServer.RegisterModule(&dotweb.HttpModule{
 		OnEndRequest: func(ctx dotweb.Context) {
 			fmt.Println("EndRequest3:", ctx)
 		},
