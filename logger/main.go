@@ -78,6 +78,10 @@ const (
 	defaultTimeLayout            = "2006-01-02 15:04:05"
 )
 
+func (l *yLog) Print(log string, logTarget string) {
+	l.Log(log, logTarget, "debug")
+}
+
 func (l *yLog) Debug(log string, logTarget string) {
 	l.Log(log, logTarget, "debug")
 }
