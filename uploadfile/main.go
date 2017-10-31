@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/devfeel/dotweb"
-	"github.com/devfeel/dotweb/framework/file"
 	"strconv"
 )
 
@@ -11,17 +10,14 @@ func main() {
 	//初始化DotServer
 	app := dotweb.New()
 
-	//设置dotserver日志目录
-	app.SetLogPath(file.GetCurrentDirectory())
+	//启用开发模式
+	app.SetDevelopmentMode()
+	//启用访问日志
+	app.SetEnabledLog(true)
+	app.UseRequestLog()
 
 	//设置路由
 	InitRoute(app.HttpServer)
-
-	//设置HttpModule
-	//InitModule(app)
-
-	//启动 监控服务
-	//app.SetPProfConfig(true, 8081)
 
 	// 开始服务
 	port := 8080
