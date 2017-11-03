@@ -12,25 +12,15 @@ func main() {
 	//初始化DotServer
 	app := dotweb.New()
 
-	//设置gzip开关
-	//app.HttpServer.SetEnabledGzip(true)
-
 	//设置路由
 	InitRoute(app.HttpServer)
-
-	//设置HttpModule
-	//InitModule(app)
-
-	//启动 监控服务
-	//pprofport := 8081
-	//go app.StartPProfServer(pprofport)
 
 	//全局容器
 	app.AppContext.Set("gstring", "gvalue")
 	app.AppContext.Set("gint", 1)
 
 	// 开始服务
-	port := 8081
+	port := 8080
 	fmt.Println("dotweb.StartServer => " + strconv.Itoa(port))
 	err := app.StartServer(port)
 	fmt.Println("dotweb.StartServer error => ", err)

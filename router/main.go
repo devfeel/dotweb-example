@@ -42,8 +42,16 @@ func Any(ctx dotweb.Context) error {
 	return err
 }
 
+func Group(ctx dotweb.Context) error {
+	_, err := ctx.WriteString("group - " + ctx.Request().Url())
+	return err
+}
+
 func InitRoute(server *dotweb.HttpServer) {
 	server.Router().GET("/", Index)
 	server.Router().GET("/d/:x/y", Index)
 	server.Router().GET("/any", Any)
+	g := server.Group("/g")
+	g.GET("/1", Group)
+	g.GET("/2", Group)
 }

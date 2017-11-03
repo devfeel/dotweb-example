@@ -16,7 +16,7 @@ func main() {
 	//app.SetPProfConfig(true, 8091)
 
 	// 开始服务
-	port := 8090
+	port := 8080
 	fmt.Println("dotweb.StartServer => " + strconv.Itoa(port))
 	err := app.StartServer(port)
 	fmt.Println("dotweb.StartServer error => ", err)

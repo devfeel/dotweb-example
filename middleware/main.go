@@ -31,9 +31,6 @@ func main() {
 	//NewSimpleAuth("admin"),
 	)
 
-	//启动 监控服务
-	app.SetPProfConfig(true, 8081)
-
 	//全局容器
 	app.AppContext.Set("gstring", "gvalue")
 	app.AppContext.Set("gint", 1)
@@ -47,7 +44,7 @@ func main() {
 
 func Index(ctx dotweb.Context) error {
 	ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
-	//fmt.Println(time.Now(), "Index Handler")
+	fmt.Println(time.Now(), "Index Handler - ", ctx.Request().Url())
 	_, err := ctx.WriteString("index  => ", fmt.Sprint(ctx.RouterNode().Middlewares()))
 	return err
 }
