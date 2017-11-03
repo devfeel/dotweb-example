@@ -22,12 +22,18 @@ func main() {
 	fmt.Println("dotweb.StartServer error => ", err)
 }
 
-func Index(ctx dotweb.Context) error {
+func Test(ctx dotweb.Context) error {
+	ctx.WriteString("hello dotweb!")
+	return nil
+}
+
+func TestWait30(ctx dotweb.Context) error {
 	time.Sleep(30 * time.Millisecond)
 	ctx.WriteString("hello dotweb!")
 	return nil
 }
 
 func InitRoute(server *dotweb.HttpServer) {
-	server.Router().GET("/", Index)
+	server.Router().GET("/", Test)
+	server.Router().GET("/wait30", TestWait30)
 }
