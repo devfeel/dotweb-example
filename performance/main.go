@@ -33,7 +33,22 @@ func TestWait30(ctx dotweb.Context) error {
 	return nil
 }
 
+func TestWait100(ctx dotweb.Context) error {
+	time.Sleep(100 * time.Millisecond)
+	ctx.WriteString("hello dotweb!")
+	return nil
+}
+
+func TestWait1000(ctx dotweb.Context) error {
+	time.Sleep(1000 * time.Millisecond)
+	ctx.WriteString("hello dotweb!")
+	return nil
+}
+
 func InitRoute(server *dotweb.HttpServer) {
 	server.Router().GET("/", Test)
 	server.Router().GET("/wait30", TestWait30)
+	server.Router().GET("/wait100", TestWait100)
+	server.Router().GET("/wait1000", TestWait1000)
+
 }
