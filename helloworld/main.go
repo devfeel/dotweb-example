@@ -7,7 +7,7 @@ import (
 
 func main() {
 	//初始化DotServer
-	app := dotweb.New()
+	app := dotweb.Classic()
 
 	//开启debug模式
 	app.SetDevelopmentMode()
@@ -24,6 +24,10 @@ func main() {
 func Hello(ctx dotweb.Context) error {
 	ctx.WriteString("hello world!")
 	return nil
+}
+
+func Do() (string, error){
+	return "", nil
 }
 
 func InitRoute(server *dotweb.HttpServer) {
