@@ -32,19 +32,16 @@ func main() {
 func Index(ctx dotweb.Context) error {
 	ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
 	flag := ctx.HttpServer().Router().MatchPath(ctx, "/d/:x/y")
-	_, err := ctx.WriteString("index - " + ctx.Request().Method + " - " + fmt.Sprint(flag))
-	return err
+	return ctx.WriteString("index - " + ctx.Request().Method + " - " + fmt.Sprint(flag))
 }
 
 func Any(ctx dotweb.Context) error {
 	ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
-	_, err := ctx.WriteString("any - " + ctx.Request().Method)
-	return err
+	return ctx.WriteString("any - " + ctx.Request().Method)
 }
 
 func Group(ctx dotweb.Context) error {
-	_, err := ctx.WriteString("group - " + ctx.Request().Url())
-	return err
+	return ctx.WriteString("group - " + ctx.Request().Url())
 }
 
 func InitRoute(server *dotweb.HttpServer) {

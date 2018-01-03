@@ -34,17 +34,13 @@ func InitRoute(server *dotweb.HttpServer) {
 func FileUpload(ctx dotweb.Context) error {
 	upload, err := ctx.Request().FormFile("file")
 	if err != nil {
-		_, err := ctx.WriteString("FormFile error " + err.Error())
-		return err
+		return ctx.WriteString("FormFile error " + err.Error())
 	} else {
 		_, err = upload.SaveFile("d:\\" + upload.FileName())
 		if err != nil {
-			_, err := ctx.WriteString("SaveFile error => " + err.Error())
-			return err
+			return ctx.WriteString("SaveFile error => " + err.Error())
 		} else {
-			_, err := ctx.WriteString("SaveFile success || " + upload.FileName() + " || " + upload.GetFileExt() + " || " + fmt.Sprint(upload.Size()))
-
-			return err
+			return ctx.WriteString("SaveFile success || " + upload.FileName() + " || " + upload.GetFileExt() + " || " + fmt.Sprint(upload.Size()))
 		}
 	}
 
@@ -54,8 +50,7 @@ func FileUploads(ctx dotweb.Context) error {
 	retString := ""
 	fileMap, err:=ctx.Request().FormFiles()
 	if err!= nil{
-		_, err := ctx.WriteString("FormFiles error " + err.Error())
-		return err
+		return ctx.WriteString("FormFiles error " + err.Error())
 	}else {
 		for _, upload:=range fileMap{
 			_, err = upload.SaveFile("d:\\" + upload.FileName())
@@ -68,6 +63,5 @@ func FileUploads(ctx dotweb.Context) error {
 		}
 	}
 
-	ctx.WriteString(retString)
-	return nil
+	return ctx.WriteString(retString)
 }

@@ -45,8 +45,7 @@ func main() {
 func Index(ctx dotweb.Context) error {
 	ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Println(time.Now(), "Index Handler - ", ctx.Request().Url())
-	_, err := ctx.WriteString("index  => ", fmt.Sprint(ctx.RouterNode().Middlewares()))
-	return err
+	return ctx.WriteString("index  => ", fmt.Sprint(ctx.RouterNode().Middlewares()))
 }
 
 func InitRoute(server *dotweb.HttpServer) {

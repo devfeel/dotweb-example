@@ -45,8 +45,7 @@ func Index(ctx dotweb.Context) error {
 	logger.Logger().Info("info", "x")
 	logger.Logger().Warn("warn", "x")
 	logger.Logger().Error("error", "x")
-	_, err := ctx.WriteStringC(201, "index => ", ctx.RouterParams())
-	return err
+	return ctx.WriteStringC(201, "index => ", ctx.RouterParams())
 }
 
 func InitRoute(server *dotweb.HttpServer) {

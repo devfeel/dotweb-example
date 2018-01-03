@@ -34,22 +34,19 @@ type UserInfo struct {
 func One(ctx dotweb.Context) error {
 	ctx.SetCookieValue("dotweb-test", "SetCookieValue", 1000)
 	fmt.Println("One ", "dotweb")
-	_, err := ctx.WriteString("One - set cookie value")
-	return err
+	return ctx.WriteString("One - set cookie value")
 }
 
 func Two(ctx dotweb.Context) error {
 	val, err := ctx.ReadCookie("dotweb-test")
 	fmt.Println("begin remove ", val, err)
-	_, err = ctx.WriteString("Two - cookie =>", val, err)
-	return err
+	return ctx.WriteString("Two - cookie =>", val, err)
 }
 
 func Three(ctx dotweb.Context) error {
 	ctx.SetCookie(&http.Cookie{Name: "dotweb-test", Value: url.QueryEscape("SetCookie"), MaxAge: 1000})
 	fmt.Println("Three ", "dotweb")
-	_, err := ctx.WriteString("Three - set cookie")
-	return err
+	return ctx.WriteString("Three - set cookie")
 }
 
 func InitRoute(server *dotweb.HttpServer) {

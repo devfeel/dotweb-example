@@ -46,7 +46,7 @@ func TestBind(ctx dotweb.Context) error {
 
 	}
 
-	_, err := ctx.WriteString("TestBind [" + errstr + "] " + fmt.Sprint(user))
+	err := ctx.WriteString("TestBind [" + errstr + "] " + fmt.Sprint(user))
 	return err
 }
 
@@ -63,7 +63,7 @@ func GetBind(ctx dotweb.Context) error {
 
 	}
 
-	_, err := ctx.WriteString("GetBind [" + errstr + "] " + fmt.Sprint(user))
+	err := ctx.WriteString("GetBind [" + errstr + "] " + fmt.Sprint(user))
 	return err
 }
 
