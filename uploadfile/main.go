@@ -36,8 +36,8 @@ func FileUpload(ctx dotweb.Context) error {
 	if err != nil {
 		return ctx.WriteString("FormFile error " + err.Error())
 	} else {
-		fmt.Println(string(upload.Bytes()))
 		_, err = upload.SaveFile("d:\\" + upload.FileName())
+		fmt.Println(string(upload.ReadBytes()))
 		if err != nil {
 			return ctx.WriteString("SaveFile error => " + err.Error())
 		} else {
