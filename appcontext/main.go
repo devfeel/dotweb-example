@@ -21,8 +21,8 @@ func main() {
 	//app.SetPProfConfig(true, 8081)
 
 	//全局容器
-	app.AppContext.Set("gstring", "gvalue")
-	app.AppContext.Set("gint", 1)
+	app.Items.Set("gstring", "gvalue")
+	app.Items.Set("gint", 1)
 
 	// 开始服务
 	port := 8080
@@ -38,18 +38,18 @@ type TestContext struct {
 
 //you can curl http://127.0.0.1:8080/
 func Index(ctx dotweb.Context) error {
-	gstring := ctx.AppContext().GetString("gstring")
-	gint := ctx.AppContext().GetInt("gint")
-	ctx.AppContext().Set("index", "index-v")
-	ctx.AppContext().Set("user", "user-v")
+	gstring := ctx.Items().GetString("gstring")
+	gint := ctx.Items().GetInt("gint")
+	ctx.Items().Set("index", "index-v")
+	ctx.Items().Set("user", "user-v")
 	return ctx.WriteString("index -> " + gstring + ";" + strconv.Itoa(gint))
 }
 
 //you can curl http://127.0.0.1:8080/2
 func Index2(ctx dotweb.Context) error {
-	gindex := ctx.AppContext().GetString("index")
-	ctx.AppContext().Remove("index")
-	user, _ := ctx.AppContext().Once("user")
+	gindex := ctx.Items().GetString("index")
+	ctx.Items().Remove("index")
+	user, _ := ctx.Items().Once("user")
 	return ctx.WriteString("index -> " + gindex + ";" + fmt.Sprint(user))
 }
 

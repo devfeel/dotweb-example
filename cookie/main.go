@@ -15,9 +15,6 @@ func main() {
 	//设置路由
 	InitRoute(app.HttpServer)
 
-	//全局容器
-	app.AppContext.Set("gstring", "gvalue")
-	app.AppContext.Set("gint", 1)
 
 	// 开始服务
 	port := 8080
