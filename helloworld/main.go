@@ -7,7 +7,7 @@ import (
 
 func main() {
 	//初始化DotServer
-	app := dotweb.Classic()
+	app := dotweb.Classic(dotweb.DefaultLogPath)
 
 	//开启debug模式
 	app.SetDevelopmentMode()
