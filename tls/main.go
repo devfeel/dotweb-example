@@ -34,7 +34,7 @@ func main() {
 	app.SetPProfConfig(true, 8081)
 
 	//设置TLS
-	app.HttpServer.SetEnabledTLS(true, "", "")
+	app.HttpServer.SetEnabledTLS(true, "D:/gotmp/emoney.cn-web.pem", "D:/gotmp/emoney.cn.key")
 
 	// 开始服务
 	port := 8080
