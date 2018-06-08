@@ -4,13 +4,16 @@ import (
 	"fmt"
 	"github.com/devfeel/dotweb"
 	"github.com/devfeel/dotweb/framework/file"
-	"github.com/devfeel/dotweb/session"
 	"strconv"
+	"encoding/gob"
+	"github.com/devfeel/dotweb/session"
 )
 
 func main() {
 	//初始化DotServer
 	app := dotweb.New()
+
+	app.SetDevelopmentMode()
 
 	//设置dotserver日志目录
 	app.SetLogPath(file.GetCurrentDirectory())
@@ -22,7 +25,8 @@ func main() {
 	//runtime mode
 	//app.HttpServer.SetSessionConfig(session.NewDefaultRuntimeConfig())
 	//redis mode
-	app.HttpServer.SetSessionConfig(session.NewDefaultRedisConfig("redis://192.168.8.175:6379/1"))
+	app.HttpServer.SetSessionConfig(session.NewDefaultRedisConfig("redis://:123456@192.168.8.175:7001/1"))
+	//app.HttpServer.SetSessionConfig(session.NewRedisConfig("redis://:123456@192.168.8.175:7001/1", "dotweb-example:session:"))
 
 	//设置路由
 	InitRoute(app.HttpServer)
@@ -37,6 +41,10 @@ func main() {
 type UserInfo struct {
 	UserName string
 	NickName string
+}
+
+func init(){
+	gob.Register(UserInfo{})
 }
 
 func TestSession(ctx dotweb.Context) error {

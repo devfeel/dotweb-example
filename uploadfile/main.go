@@ -41,7 +41,7 @@ func FileUpload(ctx dotweb.Context) error {
 		if err != nil {
 			return ctx.WriteString("SaveFile error => " + err.Error())
 		} else {
-			return ctx.WriteString("SaveFile success || " + upload.FileName() + " || " + upload.GetFileExt() + " || " + fmt.Sprint(upload.Size()))
+			return ctx.WriteString("SaveFile success || " + upload.FileName() + " || " + upload.RandomFileName() + " || " + upload.GetFileExt() + " || " + fmt.Sprint(upload.Size()))
 		}
 	}
 
