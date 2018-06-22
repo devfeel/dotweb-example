@@ -6,12 +6,14 @@ import (
 	"github.com/devfeel/dotweb/session"
 	"net/http"
 	"strconv"
+	"net/url"
 )
 
 func main() {
 	//初始化DotServer
 	app := dotweb.New()
 
+	app.UseRequestLog()
 	//设置gzip开关
 	//app.HttpServer.SetEnabledGzip(true)
 
@@ -43,6 +45,16 @@ func main() {
 	fmt.Println("dotweb.StartServer => " + strconv.Itoa(port))
 	err := app.StartServer(port)
 	fmt.Println("dotweb.StartServer error => ", err)
+}
+
+func EchoUrl(ctx dotweb.Context) error{
+	fmt.Println(ctx.Request().URL)
+	fmt.Println(ctx.Request().Url())
+	fmt.Println(fmt.Sprintf(fmt.Sprintf("%s", ctx.Request().Url())))
+
+	fmt.Println(url.QueryEscape(ctx.Request().QueryString("pageurl")))
+
+	return ctx.WriteString(ctx.Request().RequestURI)
 }
 
 func Index(ctx dotweb.Context) error {
@@ -81,6 +93,7 @@ func Redirect(ctx dotweb.Context) error {
 }
 
 func InitRoute(server *dotweb.HttpServer) {
+	server.Router().GET("/Page/PageView", EchoUrl)
 	server.Router().GET("/", Index)
 	server.Router().POST("/keypost", KeyPost)
 	server.Router().POST("/jsonpost", JsonPost)
