@@ -45,8 +45,13 @@ func Index(ctx dotweb.Context) error {
 	return ctx.WriteString("index  => ", fmt.Sprint(ctx.RouterNode().Middlewares()))
 }
 
+func Delete(ctx dotweb.Context) error {
+	return ctx.WriteString("Delete  => ", fmt.Sprint(ctx.RouterNode().Middlewares()))
+}
+
 func InitRoute(server *dotweb.HttpServer) {
 	server.Router().GET("/", Index)
+	server.DELETE("/del", Delete).Use(NewAccessFmtLog("Router-del"))
 	server.Router().GET("/use", Index).Use(NewAccessFmtLog("Router-use"))
 
 	g := server.Group("/group").Use(NewAccessFmtLog("group")).Use(NewSimpleAuth("admin"))
