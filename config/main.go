@@ -45,7 +45,7 @@ func Index(ctx dotweb.Context) error {
 
 func GetAppSet(ctx dotweb.Context) error {
 	key := ctx.QueryString("key")
-	return ctx.WriteString(ctx.Request().Url(), " => key = ", ctx.AppSetConfig().GetString(key))
+	return ctx.WriteString(ctx.Request().Url(), " => key = ", key, "set1", ctx.ConfigSet().GetString("set1"))
 }
 
 func DefaultPanic(ctx dotweb.Context) error {
