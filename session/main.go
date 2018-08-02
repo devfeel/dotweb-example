@@ -23,9 +23,13 @@ func main() {
 
 	//设置Session配置
 	//runtime mode
-	//app.HttpServer.SetSessionConfig(session.NewDefaultRuntimeConfig())
+	sessionConf := session.NewDefaultRuntimeConfig()
+	sessionConf.CookieName = "dotweb-example.SessionID"
+	app.HttpServer.SetSessionConfig(sessionConf)
 	//redis mode
-	app.HttpServer.SetSessionConfig(session.NewDefaultRedisConfig("redis://:123456@192.168.8.175:7001/1"))
+	//sessionConf := session.NewDefaultRedisConfig("redis://:123456@192.168.8.175:7001/1")
+	//sessionConf.CookieName = "dotweb-example.SessionID"
+	//app.HttpServer.SetSessionConfig(sessionConf)
 	//app.HttpServer.SetSessionConfig(session.NewRedisConfig("redis://:123456@192.168.8.175:7001/1", "dotweb-example:session:"))
 
 	//设置路由
