@@ -27,10 +27,11 @@ func main() {
 	sessionConf.CookieName = "dotweb-example.SessionID"
 	app.HttpServer.SetSessionConfig(sessionConf)
 	//redis mode
-	//sessionConf := session.NewDefaultRedisConfig("redis://:123456@192.168.8.175:7001/1")
+	//sessionConf := session.NewDefaultRedisConfig("redis://192.168.8.175:6379/1")
+	//sessionConf.BackupServerUrl = "redis://192.168.8.175:6379/1"
 	//sessionConf.CookieName = "dotweb-example.SessionID"
 	//app.HttpServer.SetSessionConfig(sessionConf)
-	//app.HttpServer.SetSessionConfig(session.NewRedisConfig("redis://:123456@192.168.8.175:7001/1", "dotweb-example:session:"))
+	////app.HttpServer.SetSessionConfig(session.NewRedisConfig("redis://:123456@192.168.8.175:7001/1", "dotweb-example:session:"))
 
 	//设置路由
 	InitRoute(app.HttpServer)

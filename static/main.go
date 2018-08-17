@@ -23,19 +23,12 @@ func main() {
 	//app.SetPProfConfig(true, 8081)
 
 	// 开始服务
-	port := 8080
+	port := 80
 	fmt.Println("dotweb.StartServer => " + strconv.Itoa(port))
 	err := app.StartServer(port)
 	fmt.Println("dotweb.StartServer error => ", err)
 }
 
-func Index(ctx dotweb.Context) error {
-	ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
-	err := ctx.WriteString("index")
-	return err
-}
-
 func InitRoute(server *dotweb.HttpServer) {
-	server.Router().GET("/", Index)
-	server.Router().ServerFile("/static/*filepath", "d:/gotmp")
+	server.Router().ServerFile("/*filepath", "./")
 }
