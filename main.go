@@ -36,6 +36,11 @@ func main() {
 	//pprofport := 8081
 	//app.SetPProfConfig(true, pprofport)
 
+	app.SetNotFoundHandle(func(context dotweb.Context) {
+		context.Response().SetHeader("dotweb-t", "tres")
+		context.WriteJsonC(http.StatusNotFound, "Not Found Json")
+	})
+
 	//全局容器
 	app.Items.Set("gstring", "gvalue")
 	app.Items.Set("gint", 1)
@@ -58,8 +63,10 @@ func EchoUrl(ctx dotweb.Context) error{
 }
 
 func Index(ctx dotweb.Context) error {
-	ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
-	ctx.WriteString("index")
+	//ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Println("Index")
+	//ctx.WriteJson("index")
+	ctx.WriteJsonC(404, "not found index")
 	return nil
 }
 
