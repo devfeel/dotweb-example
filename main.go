@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"net/url"
+	"strings"
 )
 
 func main() {
@@ -65,8 +66,12 @@ func EchoUrl(ctx dotweb.Context) error{
 func Index(ctx dotweb.Context) error {
 	//ctx.Response().Header().Set("Content-Type", "text/html; charset=utf-8")
 	fmt.Println("Index")
-	//ctx.WriteJson("index")
-	ctx.WriteJsonC(404, "not found index")
+	if strings.Index(ctx.Request().Host, ":") >0{
+		ctx.WriteString(strings.Split(ctx.Request().Host, ":")[0])
+	}else{
+		ctx.WriteString(ctx.Request().Host)
+	}
+
 	return nil
 }
 
