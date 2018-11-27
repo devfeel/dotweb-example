@@ -16,6 +16,8 @@ func main() {
 	//设置dotserver日志目录
 	app.SetLogPath(file.GetCurrentDirectory())
 
+	app.HttpServer.SetEnabledListDir(true)
+
 	//设置gzip开关
 	//app.HttpServer.SetEnabledGzip(true)
 
@@ -59,4 +61,5 @@ func InitRoute(server *dotweb.HttpServer) {
 	server.Router().GET("/dir", FileWithDir)
 	server.Router().GET("/attachment", Attachment)
 	server.Router().GET("/inline", Inline)
+	server.Router().ServerFile("/static/*filepath", "D:/gotmp")
 }
