@@ -16,7 +16,7 @@ func main() {
 	//设置dotserver日志目录
 	app.SetLogPath(file.GetCurrentDirectory())
 
-	app.HttpServer.SetEnabledListDir(false)
+	app.HttpServer.SetEnabledListDir(true)
 	app.HttpServer.SetEnabledStaticFileMiddleware(true)
 	//app.UseRequestLog()
 	//设置路由
@@ -35,7 +35,7 @@ func main() {
 func InitRoute(server *dotweb.HttpServer) {
 	g := server.Group("/files").Use(gzip.Middleware(gzip.NewConfig().UseDefault()))
 	g.Use(&dotweb.RequestLogMiddleware{})
-	g.ServerFile("/*filepath", "D:/gotmp")
+	g.ServerFile("/*", "D:/gotmp")
 	server.GET("/test", func(ctx dotweb.Context) error {
 		return ctx.WriteString("test gzip")
 	}).Use(gzip.Middleware(gzip.NewConfig().UseDefault()))
