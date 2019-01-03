@@ -4,13 +4,12 @@ import (
 	"fmt"
 	"github.com/devfeel/dotweb"
 	"github.com/devfeel/dotweb/framework/file"
-	"github.com/devfeel/middleware/gzip"
 	"strconv"
 )
 
 func main() {
 	//初始化DotServer
-	app := dotweb.Classic(file.GetCurrentDirectory())
+	app := dotweb.New()
 
 	app.SetDevelopmentMode()
 	//设置dotserver日志目录
@@ -25,6 +24,10 @@ func main() {
 	//启动 监控服务
 	//app.SetPProfConfig(true, 8081)
 
+	app.SetNotFoundHandle(func(ctx dotweb.Context){
+		ctx.WriteStringC(200, "i'm here!")
+	})
+
 	// 开始服务
 	port := 8080
 	fmt.Println("dotweb.StartServer => " + strconv.Itoa(port))
@@ -33,9 +36,11 @@ func main() {
 }
 
 func InitRoute(server *dotweb.HttpServer) {
-	g := server.Group("/files").Use(gzip.Middleware(gzip.NewConfig().UseDefault()))
+	/*g := server.Group("/files").Use(gzip.Middleware(gzip.NewConfig().UseDefault()))
 	g.Use(&dotweb.RequestLogMiddleware{})
 	g.ServerFile("/*", "D:/gotmp")
+	server.ServerFile("/file2/*", "D:/my/vue-router")
+	server.ServerFile("/file3/*", "D:/my/ng-web")
 	server.GET("/test", func(ctx dotweb.Context) error {
 		return ctx.WriteString("test gzip")
 	}).Use(gzip.Middleware(gzip.NewConfig().UseDefault()))
@@ -43,5 +48,7 @@ func InitRoute(server *dotweb.HttpServer) {
 
 	server.GET("/test2/:name", func(ctx dotweb.Context) error {
 		return ctx.WriteString("test 2")
-	})
+	})*/
+	server.ServerFile("/dst/*", "D:/my/ng-web")
+	server.RegisterServerFile(dotweb.RouteMethod_POST, "/dst/*", "D:/my/ng-web")
 }
