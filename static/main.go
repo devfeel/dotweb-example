@@ -24,7 +24,7 @@ func main() {
 	//启动 监控服务
 	//app.SetPProfConfig(true, 8081)
 
-	app.SetNotFoundHandle(func(ctx dotweb.Context){
+	app.SetNotFoundHandle(func(ctx dotweb.Context) {
 		ctx.WriteStringC(200, "i'm here!")
 	})
 
@@ -49,6 +49,6 @@ func InitRoute(server *dotweb.HttpServer) {
 	server.GET("/test2/:name", func(ctx dotweb.Context) error {
 		return ctx.WriteString("test 2")
 	})*/
-	server.ServerFile("/dst/*", "D:/my/ng-web")
-	server.RegisterServerFile(dotweb.RouteMethod_POST, "/dst/*", "D:/my/ng-web")
+	//server.ServerFile("/dst/*", "d:/gotmp")
+	server.RegisterServerFile(dotweb.RouteMethod_GET, "/dst/*", "d:/gotmp", []string{".yaml", ".log"})
 }
