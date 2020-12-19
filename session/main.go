@@ -1,12 +1,12 @@
 package main
 
 import (
+	"encoding/gob"
 	"fmt"
 	"github.com/devfeel/dotweb"
 	"github.com/devfeel/dotweb/framework/file"
-	"strconv"
-	"encoding/gob"
 	"github.com/devfeel/dotweb/session"
+	"strconv"
 )
 
 func main() {
@@ -27,11 +27,13 @@ func main() {
 	sessionConf.CookieName = "dotweb-example.SessionID"
 	app.HttpServer.SetSessionConfig(sessionConf)
 	//redis mode
-	//sessionConf := session.NewDefaultRedisConfig("redis://192.168.8.175:6379/1")
-	//sessionConf.BackupServerUrl = "redis://192.168.8.175:6379/1"
+	//sessionConf := session.NewDefaultRedisConfig("redis://47.75.211.166:6379/0")
+	//sessionConf.BackupServerUrl = "redis://47.75.211.166:6379/0"
 	//sessionConf.CookieName = "dotweb-example.SessionID"
+	//sessionConf.MaxIdle = 20
+	//sessionConf.MaxActive = 100
 	//app.HttpServer.SetSessionConfig(sessionConf)
-	////app.HttpServer.SetSessionConfig(session.NewRedisConfig("redis://:123456@192.168.8.175:7001/1", "dotweb-example:session:"))
+	//app.HttpServer.SetSessionConfig(session.NewRedisConfig("redis://:123456@192.168.8.175:7001/1", "dotweb-example:session:"))
 
 	//设置路由
 	InitRoute(app.HttpServer)
@@ -48,7 +50,7 @@ type UserInfo struct {
 	NickName string
 }
 
-func init(){
+func init() {
 	gob.Register(UserInfo{})
 }
 
